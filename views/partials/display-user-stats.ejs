@@ -1,0 +1,26 @@
+<div class="stats shadow scale-90 sm:scale-95 md:scale-100 font-['Schoolbell']">
+    <div class="stat">
+      <div class="stat-figure text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-6 w-6 md:h-8 md:w-8 stroke-current animate-pulse">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"></path>
+        </svg>
+      </div>
+      <div class="stat-title text-xs md:text-base"><%= targetUser.first_name %>'s Letters</div>
+      <div class="stat-value text-primary text-lg md:text-xl lg:text-2xl">
+        <%= totalCount %>
+      </div>
+    </div>
+  
+    <div class="stat">
+      <div class="stat-figure text-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-6 w-6 md:h-8 md:w-8 stroke-current animate-pulse">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div class="stat-title text-xs md:text-base">Latest Letter</div>
+      <div class="stat-value text-secondary text-lg md:text-xl lg:text-2xl">
+        <%= formattedRows.length > 0 ? new Date(formattedRows[0].timestamp).toLocaleDateString('en-GB') : 'N/A' %>
+      </div>
+    </div>
+  </div>
+  

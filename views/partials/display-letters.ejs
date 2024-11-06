@@ -1,0 +1,197 @@
+<div id="lettersContainer" class="container mx-auto px-4 py-8 space-y-6">
+  <% formattedRows.forEach(row => { %>
+  <div
+    id="letterContainer"
+    class="relative bg-base-200 rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto transform transition-transform"
+  >
+    <div class="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
+      <div class="avatar">
+        <div
+          class="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-lg"
+        >
+          <img
+            class="profile-picture"
+            src="<%= row.users.profile_picture_url %>"
+            alt="Profile Picture"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="h-20 bg-primary/10 rounded-t-xl"></div>
+
+    <div class="px-6 pt-2 pb-4 bg-base-200">
+      <div class="text-center mb-4">
+        <h2
+          class="text-xl font-bold text-primary inline-block px-4 bg-base-200 relative z-10"
+        >
+          <%= row.filteredTitle %>
+        </h2>
+        <div class="h-px bg-primary/30 -mt-3"></div>
+      </div>
+
+      <p class="text-base-content/90 leading-relaxed mb-4">
+        <%- row.filteredMessage.replace(/\n/g, '<br>') %>
+      </p>
+
+      <h3 class="text-base text-base-content/100 mb-4">
+        From: <%- currentUser.membership || currentUser.id === row.user_id ? `<a
+          href="/user/${row.user_id}"
+          class="text-primary no-underline animate-pulse font-['Schoolbell']"
+          >${row.users.first_name}</a
+        >` : 'Anonymous' %>
+      </h3>
+
+      <div class="text-sm text-base-content/80 space-y-1">
+        <h3>
+          Time: <%= currentUser.membership || currentUser.id === row.user_id ?
+          `${row.formattedTimestamp} (${(timezoneFlags[userTimezone] || "🌎")})`
+          : 'Anonymous' %>
+        </h3>
+        <% if (row.editTimestamp) { %>
+        <h3>
+          Edited at: <%= currentUser.membership || currentUser.id ===
+          row.user_id ? `${row.editTimestamp}`: 'Anonymous' %>
+        </h3>
+        <% } %>
+      </div>
+
+      <% if (currentUser.admin || currentUser.id === row.user_id) { %>
+      <div class="letter-actions mt-4">
+        <div class="flex gap-2 justify-end">
+          <form
+            action="/delete/<%= row.id %>?_method=DELETE"
+            method="POST"
+            class="inline-block"
+            onsubmit="return confirm('Are you sure you want to delete this message?');"
+          >
+            <button type="submit" class="btn btn-error btn-sm">Delete</button>
+          </form>
+          <button
+            class="btn btn-primary btn-sm edit-btn"
+            data-row-id="<%= row.id %>"
+          >
+            Edit
+          </button>
+        </div>
+
+        <form
+          class="hidden mt-4 space-y-4 w-full"
+          id="editForm<%= row.id %>"
+          action="/edit/<%= row.id %>?_method=PUT"
+          method="POST"
+        >
+          <div class="form-control">
+            <input
+              type="text"
+              name="title"
+              value="<%= row.filteredTitle %>"
+              class="input input-bordered w-full"
+              placeholder="Title"
+              maxlength="45"
+            />
+            <span class="text-error text-sm mt-1 hidden"></span>
+          </div>
+          <div class="form-control">
+            <textarea
+              name="message"
+              class="textarea textarea-bordered h-24"
+              placeholder="Message"
+              maxlength="600"
+              spellcheck="false"
+            >
+<%= row.filteredMessage %>
+            </textarea>
+            <span class="text-error text-sm mt-1 hidden"></span>
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="btn btn-success btn-sm">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<nav class="flex justify-center items-center my-8 font-['Tiny5']" aria-label="Pagination">
+  <% const totalLetters = totalCount; const totalPages = Math.ceil(totalLetters
+  / lettersPerPage); const maxVisiblePages = 3; let startPage = Math.max(1,
+  currentPageNumber - Math.floor(maxVisiblePages / 2)); let endPage =
+  Math.min(totalPages, startPage + maxVisiblePages - 1); if (endPage - startPage
+  + 1 < maxVisiblePages) { startPage = Math.max(1, endPage - maxVisiblePages +
+  1); } const baseUrl = targetUser ? `/user/${targetUser.id}` : "/"; %>
+
+  <div class="join">
+    <% if (currentPageNumber > 1) { %>
+    <a
+      href="<%= baseUrl %>?page=<%= currentPageNumber - 1 %>&sort=<%= currentSortOrder %>"
+      class="join-item btn btn-sm btn-primary"
+      aria-label="Go to previous page"
+      >&lt;</a
+    >
+    <% } else { %>
+    <button
+      class="join-item btn btn-sm btn-primary btn-disabled"
+      aria-hidden="true"
+    >
+      &lt;
+    </button>
+    <% } %> <% if (startPage > 1) { %>
+    <a
+      href="<%= baseUrl %>?page=1&sort=<%= currentSortOrder %>"
+      class="join-item btn btn-sm btn-primary"
+      >1</a
+    >
+    <% if (startPage > 2) { %>
+    <button class="join-item btn btn-sm btn-primary btn-disabled">...</button>
+    <% } %> <% } %> <% for (let i = startPage; i <= endPage; i++) { %> <% if (i
+    === currentPageNumber) { %>
+    <button
+      class="join-item btn btn-sm btn-primary btn-active"
+      aria-current="page"
+    >
+      <%= i %>
+    </button>
+    <% } else { %>
+    <a
+      href="<%= baseUrl %>?page=<%= i %>&sort=<%= currentSortOrder %>"
+      class="join-item btn btn-sm btn-primary"
+      ><%= i %></a
+    >
+    <% } %> <% } %> <% if (endPage < totalPages) { %> <% if (endPage <
+    totalPages - 1) { %>
+    <button class="join-item btn btn-sm btn-primary btn-disabled">...</button>
+    <% } %>
+    <a
+      href="<%= baseUrl %>?page=<%= totalPages %>&sort=<%= currentSortOrder %>"
+      class="join-item btn btn-sm btn-primary"
+      ><%= totalPages %></a
+    >
+    <% } %> <% if (currentPageNumber < totalPages) { %>
+    <a
+      href="<%= baseUrl %>?page=<%= currentPageNumber + 1 %>&sort=<%= currentSortOrder %>"
+      class="join-item btn btn-sm btn-primary"
+      aria-label="Go to next page"
+      >&gt;</a
+    >
+    <% } else { %>
+    <button
+      class="join-item btn btn-sm btn-primary btn-disabled"
+      aria-hidden="true"
+    >
+      &gt;
+    </button>
+    <% } %>
+  </div>
+</nav>
+<footer class="bg-base-200 py-4 mt-8 text-center text-base-content/80 font-['Tiny5']">
+  Developed with 
+  <span class="animate-pulse">❤️</span>
+  by <a href="https://www.anthropic.com" target="_blank" class="link link-hover text-primary">Anthropic</a>
+</footer>
+<script src="/scripts/displayLetters.js" defer></script>
+<script src="/scripts/editLetter.js" defer></script>

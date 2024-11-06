@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Macondo";
+    src: url("../fonts/Macondo-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Tiny5";
+    src: url("../fonts/Tiny5-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Schoolbell";
+    src: url("../fonts/Schoolbell-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Edo";
+    src: url("../fonts/edosz.ttf");
+}

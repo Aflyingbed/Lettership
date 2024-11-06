@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="coffee">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Write a Letter</title>
+    <script src="/scripts/letterForm.js" defer></script>
+    <script src="/scripts/theme.js" defer></script>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <link rel="icon" href="<%= currentUser.profile_picture_url %>" sizes="32x32">
+  </head> 
+  <body class="min-h-screen bg-base-200 flex items-center justify-center font-['Macondo']">
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+      <div class="card-body">
+        <h1 class="text-2xl font-bold text-center mb-6 font-['Schoolbell']">Write a Letter</h1>
+        <form
+          id="letterForm"
+          action="/letter"
+          method="POST"
+          class="form-control"
+        >
+          <div class="form-control">
+            <label for="title" class="label font-['Schoolbell']">
+              <span class="label-text">Title</span>
+            </label>
+            <input
+              type="text"
+              placeholder="GUYS DID YOU KNOW??"
+              id="title"
+              name="title"
+              maxlength="45"
+              value="<%= oldInput.title %>"
+              class="input input-bordered"
+            />
+            <% const titleError = errors && errors.find(error =>
+            error.path === 'title'); %>
+            <span
+              id="titleError"
+              class="text-error text-sm mt-1 <%= titleError ? '' : 'hidden' %>"
+            >
+              <%= titleError ? `- ${titleError.msg}` : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-4">
+            <label for="letter" class="label font-['Schoolbell']">
+              <span class="label-text">Letter</span>
+            </label>
+            <textarea
+              placeholder="HELLO KITTY IS NOT A CAT :OO"
+              id="letter"
+              name="letter"
+              maxlength="600"
+              class="textarea resize-y textarea-bordered h-24 max-h-64"
+              spellcheck="false"
+            >
+<%= oldInput.letter %></textarea
+            >
+            <% const letterError = errors && errors.find(error =>
+            error.path === 'letter'); %>
+            <span
+              id="letterError"
+              class="text-error text-sm mt-1 <%= letterError ? '' : 'hidden' %>"
+            >
+              <%= letterError ? `- ${letterError.msg}` : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-6 font-['Schoolbell']">
+            <button type="submit" class="btn btn-primary">Send Off</button>
+          </div>
+        </form>
+        <div class="text-center mt-4 font-['Schoolbell']">
+          <a href="/" class="link link-primary">Go to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

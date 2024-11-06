@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="coffee">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Membership</title>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <link rel="icon" href="<%= currentUser.profile_picture_url %>" sizes="32x32">
+    <script src="/scripts/membershipForm.js" defer></script>
+    <script src="/scripts/theme.js" defer></script>
+  </head>
+  <body class="min-h-screen bg-base-200 flex items-center justify-center font-['Schoolbell']">
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+      <div class="card-body">
+        <h1 class="text-2xl font-bold text-center mb-6">Membership</h1>
+        <% if (currentUser.membership === false) { %>
+        <form
+          action="/membership?_method=PUT"
+          method="POST"
+          class="form-control"
+        >
+          <div class="form-control">
+            <label for="membership" class="label">
+              <span class="label-text">Enter the secret code</span>
+            </label>
+            <input
+              type="text"
+              id="membership"
+              name="membership"
+              class="input input-bordered"
+            />
+            <% const membershipError = errors && errors.find(error =>
+            error.path === 'membership'); %>
+            <span
+              id="membershipError"
+              class="text-error text-sm mt-1 <%= membershipError ? '' : 'hidden' %>"
+            >
+              <%= membershipError ? membershipError.msg : '' %>
+            </span>
+          </div>
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary">Confirm</button>
+          </div>
+        </form>
+        <% } else if (currentUser.membership === true) { %>
+        <h2 class="text-xl text-center mb-6">
+          You're already a member. (How does it feel?)
+        </h2>
+        <form
+          action="/membership/cancel?_method=PUT"
+          method="POST"
+          class="form-control"
+        >
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-secondary animate-bounce">
+              Cancel Membership?
+            </button>
+          </div>
+        </form>
+        <% } %>
+        <div class="text-center mt-4">
+          <a href="/" class="link link-primary no-underline">Go to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

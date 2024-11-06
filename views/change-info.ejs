@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="coffee">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Personal Info</title>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <link rel="icon" href="<%= currentUser.profile_picture_url %>" sizes="32x32">
+    <script src="scripts/changeInfo.js" defer></script>
+    <script src="scripts/theme.js" defer></script>
+  </head>
+  <body class="min-h-screen bg-base-200 flex items-center justify-center font-['Schoolbell']">
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+      <div class="card-body">
+        <h1 class="text-2xl font-bold text-center mb-2">
+          Change Personal Information
+        </h1>
+        <h2 class="text-sm text-center mb-6 text-base-content/70">
+          (Leave blank if not changing)
+        </h2>
+        <form
+          action="/change/personal-info?_method=PUT"
+          method="POST"
+          enctype="multipart/form-data"
+          class="form-control"
+        >
+          <div class="form-control">
+            <label for="firstName" class="label">
+              <span class="label-text">Change First Name</span>
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              placeholder="<%= currentUser.first_name %>"
+              value="<%= oldInput.firstName %>"
+              class="input input-bordered"
+              oninput="checkInput()"
+            />
+            <% const firstNameError = errors && errors.find(error =>
+            error.path === 'firstName'); %>
+            <span
+              id="firstNameError"
+              class="text-error text-sm mt-1 <%= firstNameError ? '' : 'hidden' %>"
+            >
+              <%= firstNameError ? firstNameError.msg : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-4">
+            <label for="lastName" class="label">
+              <span class="label-text">Change Last Name</span>
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              placeholder="<%= currentUser.last_name %>"
+              value="<%= oldInput.lastName %>"
+              class="input input-bordered"
+              oninput="checkInput()"
+            />
+            <% const lastNameError = errors && errors.find(error =>
+            error.path === 'lastName'); %>
+            <span
+              id="lastNameError"
+              class="text-error text-sm mt-1 <%= lastNameError ? '' : 'hidden' %>"
+            >
+              <%= lastNameError ? lastNameError.msg : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-4">
+            <label for="password" class="label">
+              <span class="label-text">Change Password</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="input input-bordered"
+              oninput="checkInput()"
+            />
+            <% const passwordError = errors && errors.find(error =>
+            error.path === 'password'); %>
+            <span
+              id="passwordError"
+              class="text-error text-sm mt-1 <%= passwordError ? '' : 'hidden' %>"
+            >
+              <%= passwordError ? passwordError.msg : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-4">
+            <label for="profilePicture" class="label">
+              <span class="label-text">Change Profile Picture</span>
+            </label>
+            <input
+              type="file"
+              name="profilePicture"
+              id="profilePicture"
+              class="file-input file-input-bordered w-full"
+              oninput="checkInput()"
+            />
+            <% const profilePictureError = errors && errors.find(error =>
+            error.path === 'profilePicture'); %>
+            <span
+              id="profilePictureError"
+              class="text-error text-sm mt-1 <%= profilePictureError ? '' : 'hidden' %>"
+            >
+              <%= profilePictureError ? profilePictureError.msg : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-6">
+            <button
+              type="submit"
+              id="updateButton"
+              class="btn btn-primary"
+              disabled
+            >
+              Update Information
+            </button>
+          </div>
+        </form>
+        <div class="text-center mt-4">
+          <a href="/" class="link link-primary no-underline">Go to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

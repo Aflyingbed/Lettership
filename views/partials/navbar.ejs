@@ -1,0 +1,157 @@
+<div class="navbar bg-base-300">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow font-['Schoolbell']"
+      >
+        <li><a href="/letter">Write a letter</a></li>
+        <li>
+            <a href="<%= targetUser ? "/" : `/user/${currentUser.id}` %>">
+              <%= targetUser ? "Dashboard" : "My Letters" %>
+            </a>
+        </li>
+        <li><a href="/membership">Become a member</a></li>
+        <li>
+          <a>Settings</a>
+          <ul class="p-2">
+            <li><a href="/change">Profile</a></li>
+            <li><a href="/logout">Log out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <a class="btn btn-ghost text-xl animate-bounce font-['Tiny5']" href="/">Lettership</a>
+  </div>
+  <div class="navbar-center hidden lg:flex font-['Schoolbell']">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/letter">Write a letter</a></li>
+      <li><a href="<%= targetUser ? "/" : `/user/${currentUser.id}` %>">
+        <%= targetUser ? "Dashboard" : "My Letters" %>
+      </a></li>
+      <div class="avatar">
+        <div class="mask mask-hexagon w-10">
+          <img
+            src="<%= currentUser.profile_picture_url %>"
+            alt="Profile Picture"
+          />
+        </div>
+      </div>
+      <li><a href="/membership">Become a member</a></li>
+      <li>
+        <details>
+          <summary>Settings</summary>
+          <ul class="p-2 z-50">
+            <li><a href="/change">Personal</a></li>
+            <li><a href="/logout">Log out</a></li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </div>
+  <div class="navbar-end mr-2 font-['Tiny5']">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn m-1">
+        Theme
+        <svg
+          width="12px"
+          height="12px"
+          class="inline-block h-2 w-2 fill-current opacity-60"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 2048 2048">
+          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content bg-base-300 rounded-box z-[1] p-2 shadow-2xl">
+        <li data-theme="halloween">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Halloween"
+            value="halloween"
+             />
+        </li>
+        <li data-theme="dark">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Dark"
+            value="dark"
+             />
+        </li>
+        <li data-theme="coffee">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Coffee"
+            value="coffee"
+             />
+        </li>
+        <li data-theme="synthwave">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Synthwave"
+            value="synthwave"
+             />
+        </li>
+        <li data-theme="sunset">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Sunset"
+            value="sunset"
+             />
+        </li>
+        <li data-theme="cupcake">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Cupcake"
+            value="cupcake"
+             />
+        </li>
+        <li data-theme="pastel">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Pastel"
+            value="pastel"
+             />
+        </li>
+        <li class="rounded-b-lg" data-theme="valentine">
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Valentine"
+            value="valentine"
+             />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

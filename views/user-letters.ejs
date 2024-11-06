@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="coffee">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Letters</title>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <link rel="icon" href="<%= currentUser.profile_picture_url %>" sizes="32x32">
+    <script src="/scripts/theme.js" defer></script>
+  </head>
+  <body class="font-['Macondo']">
+    <div class="relative">
+      <%- include('partials/navbar.ejs') %>
+      <div class="absolute left-1/2 -translate-x-1/2 -bottom-24 ml-0.5">
+        <%- include('partials/display-user-stats.ejs') %>
+      </div>
+    </div>
+    
+    <div class="mt-28 container mx-auto px-4">
+      <% if (formattedRows.length === 0) { %>
+        <div class="flex justify-center items-center mt-16">
+          <div class="card bg-base-100 shadow-xl max-w-sm w-full">
+            <figure class="px-10 pt-10">
+              <img src="<%= targetUser.profile_picture_url %>" alt="<%= targetUser.first_name %>'s profile picture" class="rounded-full w-32 h-32 object-cover" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title"><%= noLettersMessage %></h2>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="flex justify-end mb-2 sm:mb-4 mr-2 sm:mr-4"> 
+          <div class="card bg-base-200 shadow-sm w-full max-w-[190px] sm:max-w-[190px]">
+            <form method="GET" action="/user/<%= formattedRows[0].user_id %>" class="card-body p-2 sm:p-3">
+              <label class="flex items-center gap-2 whitespace-nowrap">
+                <span class="text-base-content/70 font-medium text-sm sm:text-base">
+                  Sort by:
+                </span>
+                <div class="join w-full sm:w-auto">
+                  <select 
+                    class="select select-xs sm:select-sm select-bordered join-item w-full sm:w-auto"
+                    name="sort" 
+                    id="sortSelect" 
+                    onchange="this.form.submit()"
+                  >
+                    <option value="Newest" <%= currentSortOrder === "Newest" ? "selected" : "" %>>Newest</option>
+                    <option value="Oldest" <%= currentSortOrder === "Oldest" ? "selected" : "" %>>Oldest</option>
+                  </select>
+                </div>
+              </label>
+            </form>
+          </div>
+        </div>
+        <%- include('partials/display-letters.ejs') %>
+      <% } %>
+    </div>
+  </body>
+</html>
