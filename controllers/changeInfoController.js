@@ -2,7 +2,6 @@ const db = require("../db/queries");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary");
-const fs = require("node:fs");
 require("dotenv").config();
 
 cloudinary.v2.config({
@@ -45,22 +44,17 @@ function getTransformations(mimeType) {
 	throw new Error("Please upload an image file (JPEG, PNG, or GIF)");
 }
 
-async function uploadPicture(profilePicture) {
-	const filePath = profilePicture.path;
-	const mimeType = profilePicture.mimetype;
-
+async function uploadPicture(file) {
+	const mimeType = file.mimetype;
 	const transformations = getTransformations(mimeType);
 
-	const result = await cloudinary.v2.uploader.upload(filePath, {
+	const b64 = Buffer.from(file.buffer).toString("base64");
+	const dataURI = "data:" + mimeType + ";base64," + b64;
+
+	const result = await cloudinary.v2.uploader.upload(dataURI, {
 		folder: "members_profile_pictures",
 		transformation: transformations,
 	});
-
-	try {
-		fs.unlinkSync(filePath);
-	} catch (err) {
-		console.error("Error deleting temporary file:", err);
-	}
 
 	return result.secure_url;
 }
@@ -70,7 +64,10 @@ function checkAndPushImageErrors(image) {
 
 	const validMimeTypes = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
 	if (!validMimeTypes.includes(image.mimetype)) {
-		imageErrors.push({ msg: "Please upload an image file (JPEG, PNG, or GIF)", path: "profilePicture" });
+		imageErrors.push({
+			msg: "Please upload an image file (JPEG, PNG, or GIF)",
+			path: "profilePicture",
+		});
 	}
 
 	if (image.size > 10 * 1024 * 1024) {
@@ -96,13 +93,6 @@ async function changeInfo(req, res, next) {
 	}
 
 	if (allErrors.length > 0) {
-		if (profilePicture) {
-			try {
-				fs.unlinkSync(profilePicture.path);
-			} catch (err) {
-				console.error("Error deleting temporary file:", err);
-			}
-		}
 		return res.render("change-info", {
 			errors: allErrors,
 			oldInput: req.body,
