@@ -22,21 +22,23 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-    },
-  })
+	session({
+		secret: process.env.COOKIE_SECRET,
+		resave: false,
+		saveUninitialized: false,
+
+		cookie: {
+			secure: process.env.NODE_ENV === "production",
+			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+		},
+	}),
 );
 
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  next();
+	res.locals.currentUser = req.user;
+	next();
 });
 
 app.use(methodOverride("_method"));
@@ -50,25 +52,25 @@ app.use("/change", changeRoutes);
 app.use("/forgot-password", forgotPasswordRoutes);
 
 app.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/login");
-  });
+	req.logout((err) => {
+		if (err) {
+			return next(err);
+		}
+		res.redirect("/login");
+	});
 });
 
 app.all("*", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.status(404).render("404");
-  } else {
-    res.redirect("/login");
-  }
+	if (req.isAuthenticated()) {
+		res.status(404).render("404");
+	} else {
+		res.redirect("/login");
+	}
 });
 
 app.use((err, req, res, next) => {
-  const errorMessage = err.message || "Something went wrong. Please try again.";
-  res.status(err.status || 500).render("error", { errorMessage });
+	const errorMessage = err.message || "Something went wrong. Please try again.";
+	res.status(err.status || 500).render("error", { errorMessage });
 });
 
 app.listen(process.env.PORT);
