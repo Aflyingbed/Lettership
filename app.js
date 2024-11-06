@@ -26,7 +26,6 @@ app.use(
 		secret: process.env.COOKIE_SECRET,
 		resave: false,
 		saveUninitialized: false,
-
 		cookie: {
 			secure: process.env.NODE_ENV === "production",
 			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
