@@ -3,6 +3,7 @@ const app = express();
 const session = require("express-session");
 const passport = require("./config/passportConfig");
 const methodOverride = require("method-override");
+const path = require("node:path");
 
 require("dotenv").config();
 
@@ -15,8 +16,9 @@ const changeRoutes = require("./routes/changeInfo");
 const forgotPasswordRoutes = require("./routes/forgotPassword");
 
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
