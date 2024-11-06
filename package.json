@@ -1,8 +1,6 @@
 {
 	"scripts": {
-		"start": "node app.js",
-		"build:css": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --minify",
-		"vercel-build": "npm run build:css"
+		"start": "node app.js"
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.45.4",
