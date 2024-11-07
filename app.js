@@ -1,13 +1,42 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const { createClient } = require("@supabase/supabase-js");
 const passport = require("./config/passportConfig");
 const methodOverride = require("method-override");
 const path = require("node:path");
 
 require("dotenv").config();
 
-// Import routes
+const supabase = createClient(
+	process.env.SUPABASE_URL,
+	process.env.SUPABASE_KEY,
+);
+
+app.use(
+	session({
+		store: new pgSession({
+			createTableIfMissing: true,
+			conObject: {
+				connectionString: process.env.DATABASE_URL,
+				ssl:
+					process.env.NODE_ENV === "production"
+						? { rejectUnauthorized: false }
+						: false,
+			},
+		}),
+		secret: process.env.COOKIE_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: process.env.NODE_ENV === "production",
+			maxAge: 24 * 60 * 60 * 1000, // 1 day
+		},
+		proxy: true,
+	}),
+);
+
 const indexRoutes = require("./routes/index");
 const loginRoutes = require("./routes/login");
 const signupRoutes = require("./routes/signup");
@@ -22,37 +51,15 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-// Modified session configuration for Vercel
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: 'lax'  // Important for cross-site cookie handling
-    },
-    proxy: true // Important for Vercel
-  })
-);
-
-// Initialize Passport after session
-app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  // Add this for debugging
-  console.log('Session:', req.session);
-  console.log('User:', req.user);
-  next();
+	res.locals.currentUser = req.user;
+	next();
 });
 
 app.use(methodOverride("_method"));
 
-// Routes
 app.use("/", indexRoutes);
 app.use("/login", loginRoutes);
 app.use("/sign-up", signupRoutes);
@@ -62,29 +69,25 @@ app.use("/change", changeRoutes);
 app.use("/forgot-password", forgotPasswordRoutes);
 
 app.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/login");
-  });
+	req.logout((err) => {
+		if (err) {
+			return next(err);
+		}
+		res.redirect("/login");
+	});
 });
 
 app.all("*", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.status(404).render("404");
-  } else {
-    res.redirect("/login");
-  }
+	if (req.isAuthenticated()) {
+		res.status(404).render("404");
+	} else {
+		res.redirect("/login");
+	}
 });
 
 app.use((err, req, res, next) => {
-  console.error('Error:', err); // Add error logging
-  const errorMessage = err.message || "Something went wrong. Please try again.";
-  res.status(err.status || 500).render("error", { errorMessage });
+	const errorMessage = err.message || "Something went wrong. Please try again.";
+	res.status(err.status || 500).render("error", { errorMessage });
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(process.env.PORT);
