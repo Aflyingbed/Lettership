@@ -15,27 +15,12 @@ const letterRoutes = require("./routes/letter");
 const changeRoutes = require("./routes/changeInfo");
 const forgotPasswordRoutes = require("./routes/forgotPassword");
 
-app.use((req, res, next) => {
-	res.set({
-		"Access-Control-Allow-Credentials": "true",
-		"Access-Control-Allow-Origin": req.headers.origin || "*",
-		"Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-		"Access-Control-Allow-Headers":
-			"X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-	});
-	if (req.method === "OPTIONS") {
-		res.status(200).end();
-		return;
-	}
-	next();
-});
-
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.set("trust proxy", 1);
+
 app.use(
 	session({
 		secret: process.env.COOKIE_SECRET,
@@ -43,18 +28,11 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "none",
-			httpOnly: true, // Add this
-			maxAge: 24 * 60 * 60 * 1000,
+			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
 		},
-		proxy: true, // Add this for Vercel
 	}),
 );
 
-// Add this BEFORE your session middleware
-
-
-app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
@@ -62,12 +40,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use((req, res, next) => {
-	console.log("Session:", req.session);
-	console.log("User:", req.user);
-	console.log("Is Authenticated:", req.isAuthenticated());
-	next();
-});
 app.use(methodOverride("_method"));
 
 app.use("/", indexRoutes);
@@ -93,13 +65,6 @@ app.all("*", (req, res) => {
 	} else {
 		res.redirect("/login");
 	}
-});
-
-app.use((req, res, next) => {
-  console.log('Session:', req.session);
-  console.log('User:', req.user);
-  console.log('Is Authenticated:', req.isAuthenticated());
-  next();
 });
 
 app.use((err, req, res, next) => {
