@@ -72,4 +72,4 @@ app.use((err, req, res, next) => {
 	res.status(err.status || 500).render("error", { errorMessage });
 });
 
-module.exports = app;
+app.listen(process.env.PORT);
