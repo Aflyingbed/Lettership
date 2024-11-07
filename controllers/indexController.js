@@ -72,7 +72,6 @@ async function displayLetters(req, res, next) {
 
 			res.render("index", {
 				formattedRows,
-				userTimezone,
 				currentSortOrder: sortOrder,
 				currentPageNumber: page,
 				lettersPerPage,
@@ -124,7 +123,6 @@ async function displayUserLetters(req, res, next) {
 
 			res.render("user-letters", {
 				formattedRows,
-				userTimezone,
 				noLettersMessage:
 					formattedRows.length === 0
 						? `${userFirstName} has written 0 letters.`
