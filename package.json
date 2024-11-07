@@ -6,7 +6,6 @@
 		"@supabase/supabase-js": "^2.45.4",
 		"bcryptjs": "^2.4.3",
 		"cloudinary": "^2.5.1",
-		"connect-pg-simple": "^10.0.0",
 		"daisyui": "^4.12.14",
 		"dayjs": "^1.11.13",
 		"dotenv": "^16.4.5",
