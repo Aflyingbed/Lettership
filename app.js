@@ -28,11 +28,18 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: process.env.NODE_ENV === "production",
-			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+			sameSite: "lax", // Add this
+			httpOnly: true, // Add this
+			maxAge: 24 * 60 * 60 * 1000,
 		},
+		proxy: true, // Add this for Vercel
 	}),
 );
 
+// Add this BEFORE your session middleware
+app.set("trust proxy", 1);
+
+app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
