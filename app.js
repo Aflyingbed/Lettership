@@ -95,6 +95,13 @@ app.all("*", (req, res) => {
 	}
 });
 
+app.use((req, res, next) => {
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  console.log('Is Authenticated:', req.isAuthenticated());
+  next();
+});
+
 app.use((err, req, res, next) => {
 	const errorMessage = err.message || "Something went wrong. Please try again.";
 	res.status(err.status || 500).render("error", { errorMessage });
