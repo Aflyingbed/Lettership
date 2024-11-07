@@ -73,7 +73,6 @@ async function displayLetters(req, res, next) {
 			res.render("index", {
 				formattedRows,
 				userTimezone,
-				timezoneFlags,
 				currentSortOrder: sortOrder,
 				currentPageNumber: page,
 				lettersPerPage,
@@ -126,7 +125,6 @@ async function displayUserLetters(req, res, next) {
 			res.render("user-letters", {
 				formattedRows,
 				userTimezone,
-				timezoneFlags,
 				noLettersMessage:
 					formattedRows.length === 0
 						? `${userFirstName} has written 0 letters.`
@@ -173,50 +171,4 @@ module.exports = {
 	displayUserLetters,
 	removeLetter,
 	editLetter,
-};
-
-const timezoneFlags = {
-	"America/New_York": "🇺🇸", // USA
-	"Europe/London": "🇬🇧", // UK
-	"Asia/Tokyo": "🇯🇵", // Japan
-	"Europe/Berlin": "🇩🇪", // Germany
-	"Australia/Sydney": "🇦🇺", // Australia
-	"Asia/Kuala_Lumpur": "🇲🇾", // Malaysia
-	"Asia/Karachi": "🇵🇰", // Pakistan
-	"Asia/Bangkok": "🇹🇭", // Thailand
-	"Asia/Shanghai": "🇨🇳", // China
-	"Europe/Paris": "🇫🇷", // France
-	"Asia/Delhi": "🇮🇳", // India
-	"Africa/Cairo": "🇪🇬", // Egypt
-	"America/Toronto": "🇨🇦", // Canada
-	"Europe/Moscow": "🇷🇺", // Russia
-	"Asia/Dubai": "🇦🇪", // UAE
-	"America/Los_Angeles": "🇺🇸", // USA (West Coast)
-	"America/Sao_Paulo": "🇧🇷", // Brazil
-	"Africa/Johannesburg": "🇿🇦", // South Africa
-	"Asia/Singapore": "🇸🇬", // Singapore
-	"Asia/Seoul": "🇰🇷", // South Korea
-	"Europe/Amsterdam": "🇳🇱", // Netherlands
-	"Europe/Madrid": "🇪🇸", // Spain
-	"Europe/Rome": "🇮🇹", // Italy
-	"Pacific/Auckland": "🇳🇿", // New Zealand
-	"America/Mexico_City": "🇲🇽", // Mexico
-	"Europe/Zurich": "🇨🇭", // Switzerland
-	"Europe/Oslo": "🇳🇴", // Norway
-	"Europe/Stockholm": "🇸🇪", // Sweden
-	"Europe/Vienna": "🇦🇹", // Austria
-	"Europe/Brussels": "🇧🇪", // Belgium
-	"America/Chicago": "🇺🇸", // USA (Central)
-	"America/Denver": "🇺🇸", // USA (Mountain)
-	"America/Phoenix": "🇺🇸", // USA (Arizona)
-	"Africa/Nairobi": "🇰🇪", // Kenya
-	"Asia/Hong_Kong": "🇭🇰", // Hong Kong
-	"Asia/Jakarta": "🇮🇩", // Indonesia
-	"America/Bogota": "🇨🇴", // Colombia
-	"Europe/Dublin": "🇮🇪", // Ireland
-	"America/Argentina/Buenos_Aires": "🇦🇷", // Argentina
-	"Europe/Lisbon": "🇵🇹", // Portugal
-	"Europe/Bucharest": "🇷🇴", // Romania
-	"Europe/Warsaw": "🇵🇱", // Poland
-	"Europe/Athens": "🇬🇷", // Greece
 };

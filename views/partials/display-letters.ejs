@@ -45,12 +45,12 @@
       <div class="text-sm text-base-content/80 space-y-1">
         <h3>
           Time: <%= currentUser.membership || currentUser.id === row.user_id ?
-          `${row.formattedTimestamp} (${(timezoneFlags[userTimezone] || "🌎")})`
+          row.formattedTimestamp
           : 'Anonymous' %>
         </h3>
         <% if (row.editTimestamp) { %>
         <h3>
-          Edited at: <%= currentUser.membership || currentUser.id ===
+          Edited: <%= currentUser.membership || currentUser.id ===
           row.user_id ? `${row.editTimestamp}`: 'Anonymous' %>
         </h3>
         <% } %>
