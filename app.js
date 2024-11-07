@@ -1,41 +1,11 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
-const pgSession = require("connect-pg-simple")(session);
-const { createClient } = require("@supabase/supabase-js");
 const passport = require("./config/passportConfig");
 const methodOverride = require("method-override");
 const path = require("node:path");
 
 require("dotenv").config();
-
-const supabase = createClient(
-	process.env.SUPABASE_URL,
-	process.env.SUPABASE_KEY,
-);
-
-app.use(
-	session({
-		store: new pgSession({
-			createTableIfMissing: true,
-			conObject: {
-				connectionString: process.env.DATABASE_URL,
-				ssl:
-					process.env.NODE_ENV === "production"
-						? { rejectUnauthorized: false }
-						: false,
-			},
-		}),
-		secret: process.env.COOKIE_SECRET,
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			secure: process.env.NODE_ENV === "production",
-			maxAge: 24 * 60 * 60 * 1000, // 1 day
-		},
-		proxy: true,
-	}),
-);
 
 const indexRoutes = require("./routes/index");
 const loginRoutes = require("./routes/login");
@@ -50,6 +20,18 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+	session({
+		secret: process.env.COOKIE_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: process.env.NODE_ENV === "production",
+			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+		},
+	}),
+);
 
 app.use(passport.session());
 
