@@ -6,6 +6,7 @@
 		"@supabase/supabase-js": "^2.45.4",
 		"bcryptjs": "^2.4.3",
 		"cloudinary": "^2.5.1",
+		"daisyui": "^4.12.14",
 		"dayjs": "^1.11.13",
 		"dotenv": "^16.4.5",
 		"ejs": "^3.1.10",
@@ -18,7 +19,6 @@
 		"passport": "^0.7.0",
 		"passport-local": "^1.0.0",
 		"supabase": "^1.200.3",
-		"tailwindcss": "^3.4.14",
-		"daisyui": "^4.12.14"
+		"tailwindcss": "^3.4.14"
 	}
 }

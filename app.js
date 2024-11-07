@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const path = require("node:path");
 
 require("dotenv").config();
+app.use(passport.session());
 
 const indexRoutes = require("./routes/index");
 const loginRoutes = require("./routes/login");
@@ -27,13 +28,11 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			secure: true,
+			secure: false,
 			maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
 		},
 	}),
 );
-
-app.use(passport.session());
 
 app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
