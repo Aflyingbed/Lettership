@@ -3,6 +3,7 @@ const app = express();
 const session = require("express-session");
 const passport = require("./config/passportConfig");
 const methodOverride = require("method-override");
+const getTimezone = require("./middleware/getTimezone");
 const path = require("node:path");
 
 require("dotenv").config();
@@ -19,7 +20,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 app.use(
 	session({
@@ -41,6 +44,8 @@ app.use((req, res, next) => {
 });
 
 app.use(methodOverride("_method"));
+
+app.use(getTimezone);
 
 app.use("/", indexRoutes);
 app.use("/login", loginRoutes);

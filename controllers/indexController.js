@@ -15,30 +15,37 @@ const matcher = new RegExpMatcher({
 	...englishRecommendedTransformers,
 });
 
-const asteriskStrategy = (ctx) => '*'.repeat(ctx.matchLength);
+const asteriskStrategy = (ctx) => "*".repeat(ctx.matchLength);
 const censor = new TextCensor().setStrategy(asteriskStrategy);
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+function formatTimestamp(utcTimestamp, timezone) {
+	if (!utcTimestamp) return null;
+
+	try {
+		return dayjs
+			.utc(utcTimestamp)
+			.tz(timezone || "UTC")
+			.format("ddd, MMM D, YYYY - h:mm A");
+	} catch (error) {
+		console.error("Error formatting timestamp:", error);
+		return dayjs.utc(utcTimestamp).format("ddd, MMM D, YYYY - h:mm A");
+	}
+}
+
 function processLetters(rows, userTimezone) {
 	return rows.map((row) => {
 		const titleMatches = matcher.getAllMatches(row.title);
 		const messageMatches = matcher.getAllMatches(row.message);
+
 		return {
 			...row,
 			filteredTitle: censor.applyTo(row.title, titleMatches),
 			filteredMessage: censor.applyTo(row.message, messageMatches),
-			formattedTimestamp: dayjs
-				.utc(row.timestamp)
-				.tz(userTimezone)
-				.format("ddd, MMM D, YYYY - h:mm A"),
-			editTimestamp: row.edit_timestamp
-				? dayjs
-						.utc(row.edit_timestamp)
-						.tz(userTimezone)
-						.format("ddd, MMM D, YYYY - h:mm A")
-				: null,
+			formattedTimestamp: formatTimestamp(row.timestamp, userTimezone),
+			editTimestamp: formatTimestamp(row.edit_timestamp, userTimezone),
 		};
 	});
 }
@@ -46,7 +53,6 @@ function processLetters(rows, userTimezone) {
 async function displayLetters(req, res, next) {
 	try {
 		if (req.isAuthenticated()) {
-			const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const sortOrder = req.query.sort || "Newest";
 			const page = parseInt(req.query.page) || 1;
 			const lettersPerPage = 5;
@@ -67,7 +73,7 @@ async function displayLetters(req, res, next) {
 				return res.redirect(`/?page=${maxPages}&sort=${sortOrder}`);
 			}
 
-			const formattedRows = await processLetters(rows, userTimezone);
+			const formattedRows = await processLetters(rows, req.userTimezone);
 			await db.incrementVisitCount(req.user.id);
 
 			res.render("index", {
@@ -91,7 +97,6 @@ async function displayUserLetters(req, res, next) {
 
 	try {
 		if (req.isAuthenticated()) {
-			const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const sortOrder = req.query.sort || "Newest";
 			const page = parseInt(req.query.page) || 1;
 			const lettersPerPage = 5;
@@ -119,7 +124,7 @@ async function displayUserLetters(req, res, next) {
 				);
 			}
 
-			const formattedRows = await processLetters(rows, userTimezone);
+			const formattedRows = await processLetters(rows, req.userTimezone);
 
 			res.render("user-letters", {
 				formattedRows,
