@@ -21,21 +21,21 @@ const censor = new TextCensor().setStrategy(asteriskStrategy);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-function formatTimestamp(utcTimestamp, timezone) {
+function formatTimestamp(utcTimestamp) {
 	if (!utcTimestamp) return null;
 
 	try {
 		return dayjs
 			.utc(utcTimestamp)
-			.tz(timezone || "UTC")
-			.format("ddd, MMM D, YYYY - h:mm A");
+			.tz("Asia/Karachi")
+			.format("ddd, MMM D, YYYY - h:mm A [PKT]");
 	} catch (error) {
 		console.error("Error formatting timestamp:", error);
 		return dayjs.utc(utcTimestamp).format("ddd, MMM D, YYYY - h:mm A");
 	}
 }
 
-function processLetters(rows, userTimezone) {
+function processLetters(rows) {
 	return rows.map((row) => {
 		const titleMatches = matcher.getAllMatches(row.title);
 		const messageMatches = matcher.getAllMatches(row.message);
@@ -44,8 +44,8 @@ function processLetters(rows, userTimezone) {
 			...row,
 			filteredTitle: censor.applyTo(row.title, titleMatches),
 			filteredMessage: censor.applyTo(row.message, messageMatches),
-			formattedTimestamp: formatTimestamp(row.timestamp, userTimezone),
-			editTimestamp: formatTimestamp(row.edit_timestamp, userTimezone),
+			formattedTimestamp: formatTimestamp(row.timestamp),
+			editTimestamp: formatTimestamp(row.edit_timestamp),
 		};
 	});
 }
@@ -73,7 +73,7 @@ async function displayLetters(req, res, next) {
 				return res.redirect(`/?page=${maxPages}&sort=${sortOrder}`);
 			}
 
-			const formattedRows = await processLetters(rows, req.userTimezone);
+			const formattedRows = await processLetters(rows);
 			await db.incrementVisitCount(req.user.id);
 
 			res.render("index", {
@@ -124,7 +124,7 @@ async function displayUserLetters(req, res, next) {
 				);
 			}
 
-			const formattedRows = await processLetters(rows, req.userTimezone);
+			const formattedRows = await processLetters(rows);
 
 			res.render("user-letters", {
 				formattedRows,
