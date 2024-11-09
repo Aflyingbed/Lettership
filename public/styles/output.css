@@ -1244,10 +1244,6 @@ html {
 }
 
 @media (hover:hover) {
-  .link-hover:hover {
-    text-decoration-line: underline;
-  }
-
   .label a:hover {
     --tw-text-opacity: 1;
     color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
@@ -1806,10 +1802,6 @@ html {
 .link {
   cursor: pointer;
   text-decoration-line: underline;
-}
-
-.link-hover {
-  text-decoration-line: none;
 }
 
 .mask {
@@ -3337,27 +3329,6 @@ html {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes ping {
-  75%, 100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-
-.animate-ping {
-  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
 .resize-y {
   resize: vertical;
 }
@@ -3685,12 +3656,6 @@ html {
   font-family: "Schoolbell";
 
   src: url("../fonts/Schoolbell-Regular.ttf");
-}
-
-@font-face {
-  font-family: "Edo";
-
-  src: url("../fonts/edosz.ttf");
 }
 
 @media (min-width: 640px) {
