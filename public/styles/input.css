@@ -16,3 +16,33 @@
     font-family: "Schoolbell";
     src: url("../fonts/Schoolbell-Regular.ttf");
 }
+
+@font-face {
+    font-family: "Special-Elite";
+    src: url("../fonts/SpecialElite-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Papyrus";
+    src: url("../fonts/papyrus.ttf");
+}
+
+@font-face {
+    font-family: "Insta";
+    src: url("../fonts/Instagram Sans.ttf");
+}
+
+@font-face {
+    font-family: "Edo";
+    src: url("../fonts/edosz.ttf");
+}
+
+@font-face {
+    font-family: "DS";
+    src: url("../fonts/OptimusPrinceps.ttf");
+}
+
+@font-face {
+    font-family: "Comic";
+    src: url("../fonts/RubikDoodleShadow-Regular.ttf");
+}
