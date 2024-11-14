@@ -9,6 +9,9 @@ const matcher = new RegExpMatcher({
   ...englishRecommendedTransformers,
 });
 
+const spotifyUrlPattern =
+  /https:\/\/open\.spotify\.com\/(track|playlist|artist)\/([A-Za-z0-9]{22})/;
+
 const { check } = require("express-validator");
 
 const validationRules = [
@@ -39,16 +42,16 @@ const validationRules = [
       }
       return true;
     }),
-  check("confirmPassword")
-    .trim()
+  check("spotifyUrl")
     .optional()
-    .custom((confirmPassword, { req }) => {
-      if (req.body.password && req.body.password !== confirmPassword) {
-        throw new Error("Passwords do not match");
+    .custom((spotifyUrl) => {
+      if (spotifyUrl && !spotifyUrlPattern.test(spotifyUrl)) {
+        throw new Error(
+          "Please provide a valid Spotify URL (track, playlist, or artist)"
+        );
       }
       return true;
-    })
-    .withMessage("Please confirm your password"),
+    }),
 ];
 
 module.exports = validationRules;

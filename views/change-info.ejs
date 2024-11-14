@@ -6,7 +6,9 @@
     <script src="scripts/changeInfo.js" defer></script>
     <script src="scripts/theme.js" defer></script>
   </head>
-  <body class="min-h-screen bg-base-200 flex items-center justify-center font-['Schoolbell']">
+  <body
+    class="min-h-screen bg-base-200 flex items-center justify-center font-['Schoolbell']"
+  >
     <div class="card w-full max-w-sm shadow-2xl bg-base-100">
       <div class="card-body">
         <h1 class="text-2xl font-bold text-center mb-2">
@@ -34,8 +36,8 @@
               class="input input-bordered"
               oninput="checkInput()"
             />
-            <% const firstNameError = errors && errors.find(error =>
-            error.path === 'firstName'); %>
+            <% const firstNameError = errors && errors.find(error => error.path
+            === 'firstName'); %>
             <span
               id="firstNameError"
               class="text-error text-sm mt-1 <%= firstNameError ? '' : 'hidden' %>"
@@ -57,8 +59,8 @@
               class="input input-bordered"
               oninput="checkInput()"
             />
-            <% const lastNameError = errors && errors.find(error =>
-            error.path === 'lastName'); %>
+            <% const lastNameError = errors && errors.find(error => error.path
+            === 'lastName'); %>
             <span
               id="lastNameError"
               class="text-error text-sm mt-1 <%= lastNameError ? '' : 'hidden' %>"
@@ -78,8 +80,8 @@
               class="input input-bordered"
               oninput="checkInput()"
             />
-            <% const passwordError = errors && errors.find(error =>
-            error.path === 'password'); %>
+            <% const passwordError = errors && errors.find(error => error.path
+            === 'password'); %>
             <span
               id="passwordError"
               class="text-error text-sm mt-1 <%= passwordError ? '' : 'hidden' %>"
@@ -109,13 +111,33 @@
             </span>
           </div>
 
-          <div class="form-control mt-6">
-            <button
-              type="submit"
-              id="updateButton"
-              class="btn btn-primary"
-              disabled
+          <div class="form-control mt-4">
+            <label for="spotifyUrl" class="label">
+              <span class="label-text"
+                >Change Spotify showcase (Track, Playlist, or Artist)</span
+              >
+            </label>
+            <input
+              type="text"
+              name="spotifyUrl"
+              id="spotifyUrl"
+              placeholder="https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8?si=f73e1fcc631942e7"
+              value="<%= oldInput.spotifyUrl %>"
+              class="input input-bordered"
+              oninput="checkInput()"
+            />
+            <% const spotifyUrlError = errors && errors.find(error => error.path
+            === 'spotifyUrl'); %>
+            <span
+              id="spotifyUrlError"
+              class="text-error text-sm mt-1 <%= spotifyUrlError ? '' : 'hidden' %>"
             >
+              <%= spotifyUrlError ? spotifyUrlError.msg : '' %>
+            </span>
+          </div>
+
+          <div class="form-control mt-6">
+            <button type="submit" id="updateButton" class="btn btn-primary">
               Update Information
             </button>
           </div>

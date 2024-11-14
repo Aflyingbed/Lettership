@@ -5,7 +5,10 @@
     class="relative bg-base-200 rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto transform transition-transform"
   >
     <div class="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
-      <div class="avatar">
+      <div
+        class="avatar cursor-pointer"
+        onclick="toggleSpotifyEmbed(<%= row.id %>)"
+      >
         <div
           class="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-lg"
         >
@@ -15,6 +18,40 @@
             alt="Profile Picture"
           />
         </div>
+      </div>
+    </div>
+
+    <div
+      id="spotifyEmbed<%= row.id %>"
+      class="hidden fixed right-4 top-1/2 transform -translate-y-1/2 w-80 z-50 bg-base-100 rounded-xl shadow-lg p-4 transition-all duration-300 ease-in-out"
+    >
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-bold text-primary text-center">
+          <%= row.users.first_name %>'s vibe
+        </h3>
+        <button
+          onclick="toggleSpotifyEmbed(<%= row.id %>)"
+          class="btn btn-circle btn-sm btn-primary"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="relative">
+        <div
+          id="spinner<%= row.id %>"
+          class="absolute inset-0 flex justify-center items-center bg-base-100 z-10"
+        >
+          <span class="loading loading-spinner loading-lg"></span>
+        </div>
+        <iframe
+          id="spotifyIframe<%= row.id %>"
+          class="w-full rounded-lg shadow-md ring ring-primary ring-offset-2"
+          src="https://open.spotify.com/embed/<%= row.users.spotify_track_id %>?utm_source=generator"
+          height="152"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
       </div>
     </div>
 
@@ -31,7 +68,7 @@
       </div>
 
       <p class="text-base-content/90 leading-relaxed mb-4">
-        <%- row.filteredMessage.replace(/\n/g, '<br>') %>
+        <%- row.filteredMessage.replace(/\n/g, '<br />') %>
       </p>
 
       <h3 class="text-base text-base-content/100 mb-4">
@@ -45,13 +82,12 @@
       <div class="text-sm text-base-content/80 space-y-1">
         <h3>
           Sent: <%= currentUser.membership || currentUser.id === row.user_id ?
-          row.formattedTimestamp
-          : 'Anonymous' %>
+          row.formattedTimestamp : 'Anonymous' %>
         </h3>
         <% if (row.editTimestamp) { %>
         <h3>
-          Edited: <%= currentUser.membership || currentUser.id ===
-          row.user_id ? `${row.editTimestamp}`: 'Anonymous' %>
+          Edited: <%= currentUser.membership || currentUser.id === row.user_id ?
+          `${row.editTimestamp}`: 'Anonymous' %>
         </h3>
         <% } %>
       </div>
@@ -117,7 +153,10 @@
   <% }) %>
 </div>
 
-<nav class="flex justify-center items-center my-8 font-['Tiny5']" aria-label="Pagination">
+<nav
+  class="flex justify-center items-center my-8 font-['Tiny5']"
+  aria-label="Pagination"
+>
   <% const totalLetters = totalCount; const totalPages = Math.ceil(totalLetters
   / lettersPerPage); const maxVisiblePages = 3; let startPage = Math.max(1,
   currentPageNumber - Math.floor(maxVisiblePages / 2)); let endPage =

@@ -30,7 +30,7 @@ async function getUserById(userID) {
 	return data;
 }
 
-async function insertSignUpData(fName, lName, username, password, profilePic) {
+async function insertSignUpData(fName, lName, username, password, profilePic, trackID) {
 	const { data, error } = await supabase
 		.from("users")
 		.insert([
@@ -40,6 +40,7 @@ async function insertSignUpData(fName, lName, username, password, profilePic) {
 				username: username,
 				password: password,
 				profile_picture_url: profilePic,
+				spotify_track_id: trackID,
 			},
 		])
 		.select("id");
@@ -118,7 +119,8 @@ async function getLetters(sort, offset, limit) {
 		.select(
 			`*, users (
       first_name, 
-      profile_picture_url
+      profile_picture_url,
+	  spotify_track_id
     )`,
 		)
 		.order("timestamp", { ascending: sort })
@@ -151,7 +153,8 @@ async function getUserLetters(userID, sort, offset, limit) {
 		.select(
 			`*, users (
       first_name, 
-      profile_picture_url
+      profile_picture_url,
+	  spotify_track_id
     )`,
 		)
 		.eq("user_id", userID)
