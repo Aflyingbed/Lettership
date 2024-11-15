@@ -10,11 +10,14 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
 });
 
 let openEmbed = null;
+
 function toggleSpotifyEmbed(id) {
   const embed = document.getElementById(`spotifyEmbed${id}`);
   const spinner = document.getElementById(`spinner${id}`);
+  const iframe = document.getElementById(`spotifyIframe${id}`);
 
   if (openEmbed && openEmbed !== embed) {
+    pauseSpotifyPlayback(openEmbed.querySelector("iframe"));
     openEmbed.classList.add("hidden");
     openEmbed = null;
   }
@@ -25,15 +28,21 @@ function toggleSpotifyEmbed(id) {
 
     if (!embed.dataset.loaded) {
       spinner.style.display = "flex";
-      const iframe = document.getElementById(`spotifyIframe${id}`);
       iframe.onload = () => {
         spinner.style.display = "none";
         embed.dataset.loaded = "true";
       };
     }
   } else {
+    pauseSpotifyPlayback(iframe);
     embed.classList.add("hidden");
     openEmbed = null;
+  }
+}
+
+function pauseSpotifyPlayback(iframe) {
+  if (iframe?.contentWindow) {
+    iframe.contentWindow.postMessage({ command: "pause" }, "*");
   }
 }
 
@@ -43,6 +52,7 @@ document.addEventListener("click", (event) => {
     !openEmbed.contains(event.target) &&
     !event.target.closest(".avatar")
   ) {
+    pauseSpotifyPlayback(openEmbed.querySelector("iframe"));
     openEmbed.classList.add("hidden");
     openEmbed = null;
   }
