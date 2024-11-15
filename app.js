@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const passport = require("./config/passportConfig");
-const methodOverride = require("method-override");
 const path = require("node:path");
 
 require("dotenv").config();
@@ -41,8 +40,6 @@ app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
 	next();
 });
-
-app.use(methodOverride("_method"));
 
 app.use("/", indexRoutes);
 app.use("/login", loginRoutes);

@@ -34,7 +34,7 @@ async function uploadPicture(file) {
   const transformations = getTransformations(mimeType);
 
   const b64 = Buffer.from(file.buffer).toString("base64");
-  const dataURI = "data:" + mimeType + ";base64," + b64;
+  const dataURI = `data:${mimeType};base64,${b64}`;
 
   const result = await cloudinary.v2.uploader.upload(dataURI, {
     folder: "members_profile_pictures",

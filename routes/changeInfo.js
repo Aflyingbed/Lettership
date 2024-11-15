@@ -14,8 +14,8 @@ const upload = multer({
 const changeInfoController = require("../controllers/changeInfoController");
 
 router.get("/", changeInfoController.getChangeForm);
-router.put(
-	"/personal-info",
+router.post(
+	"/",
 	upload.single("profilePicture"),
 	validationRules,
 	changeInfoController.changeInfo,

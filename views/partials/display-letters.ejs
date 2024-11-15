@@ -96,7 +96,7 @@
       <div class="letter-actions mt-4">
         <div class="flex gap-2 justify-end">
           <form
-            action="/delete/<%= row.id %>?_method=DELETE"
+            action="/delete/<%= row.id %>"
             method="POST"
             class="inline-block"
             onsubmit="return confirm('Are you sure you want to delete this message?');"
@@ -114,7 +114,7 @@
         <form
           class="hidden mt-4 space-y-4 w-full"
           id="editForm<%= row.id %>"
-          action="/edit/<%= row.id %>?_method=PUT"
+          action="/edit/<%= row.id %>"
           method="POST"
         >
           <div class="form-control">
