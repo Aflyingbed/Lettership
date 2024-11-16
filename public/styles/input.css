@@ -3,46 +3,107 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "Macondo";
-    src: url("../fonts/Macondo-Regular.ttf");
+  font-family: "Macondo";
+  src: url("../fonts/Macondo-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Tiny5";
-    src: url("../fonts/Tiny5-Regular.ttf");
+  font-family: "Tiny5";
+  src: url("../fonts/Tiny5-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Schoolbell";
-    src: url("../fonts/Schoolbell-Regular.ttf");
+  font-family: "Schoolbell";
+  src: url("../fonts/Schoolbell-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Special-Elite";
-    src: url("../fonts/SpecialElite-Regular.ttf");
+  font-family: "Special-Elite";
+  src: url("../fonts/SpecialElite-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Papyrus";
-    src: url("../fonts/papyrus.ttf");
+  font-family: "Papyrus";
+  src: url("../fonts/papyrus.ttf");
 }
 
 @font-face {
-    font-family: "Insta";
-    src: url("../fonts/Instagram Sans.ttf");
+  font-family: "Insta";
+  src: url("../fonts/Instagram Sans.ttf");
 }
 
 @font-face {
-    font-family: "Edo";
-    src: url("../fonts/edosz.ttf");
+  font-family: "Edo";
+  src: url("../fonts/edosz.ttf");
 }
 
 @font-face {
-    font-family: "DS";
-    src: url("../fonts/OptimusPrincepsSemiBold.ttf");
+  font-family: "DS";
+  src: url("../fonts/OptimusPrincepsSemiBold.ttf");
 }
 
 @font-face {
-    font-family: "Comic";
-    src: url("../fonts/RubikDoodleShadow-Regular.ttf");
+  font-family: "Comic";
+  src: url("../fonts/RubikDoodleShadow-Regular.ttf");
+}
+
+@layer utilities {
+  [data-theme="halloween"] {
+    --cursor-default: url("/cursors/chainsaw-man-pochita-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/chainsaw-man-pochita-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="dark"] {
+    --cursor-default: url("/cursors/sanrio-nyanmi-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/sanrio-nyanmi-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="coffee"] {
+    --cursor-default: url("/cursors/sanrio-duckadoo-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/sanrio-duckadoo-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="synthwave"] {
+    --cursor-default: url("/cursors/pop-cat-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/pop-cat-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="sunset"] {
+    --cursor-default: url("/cursors/melody-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/melody-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="cupcake"] {
+    --cursor-default: url("/cursors/sanrio-powder-with-flower-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/sanrio-powder-with-flower-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="pastel"] {
+    --cursor-default: url("/cursors/kuromi-and-my-melody-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/kuromi-and-my-melody-pointer.png") 16 16, pointer;
+  }
+
+  [data-theme="valentine"] {
+    --cursor-default: url("/cursors/kuromi-cursor-default.png") 16 16, auto;
+    --cursor-pointer: url("/cursors/kuromi-cursor-pointer.png") 16 16, pointer;
+  }
+
+  body {
+    @apply cursor-[var(--cursor-default)];
+  }
+
+  :is(
+      summary,
+      a,
+      button,
+      input,
+      input[type="radio"],
+      select,
+      .btn,
+      [role="button"],
+      [tabindex]:not([tabindex="-1"]),
+      .cursor-pointer
+    ) {
+    @apply cursor-[var(--cursor-pointer)];
+  }
 }
