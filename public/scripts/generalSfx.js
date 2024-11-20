@@ -84,5 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         playSound(sound);
       });
+
+      element.addEventListener("input", (e) => {
+        if (e.inputType === "deleteContentBackward") {
+          playSound(sounds.typeBackspace);
+        } else if (e.inputType === "insertText" && e.data === " ") {
+          playSound(sounds.typeSpace);
+        }
+      });
     });
 });
