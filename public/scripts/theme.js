@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeControllers = document.querySelectorAll(".theme-controller");
   const defaultTheme = "dark";
   const savedTheme = localStorage.getItem("theme") || defaultTheme;
-  
+
   const themeSounds = {
     halloween: { path: "../sfx/theme/oh-my-gah.mp3", audio: null },
     dark: { path: "../sfx/theme/notification-bell.mp3", audio: null },
@@ -50,5 +50,29 @@ document.addEventListener("DOMContentLoaded", () => {
           .catch((err) => console.log("Could not play sound:", err));
       }
     });
+  });
+});
+
+document.addEventListener("click", (e) => {
+  const ripple = document.createElement("div");
+
+  const cursorSize = 50;
+
+  const rect = document.documentElement.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  ripple.style.width = ripple.style.height = `${cursorSize}px`;
+  ripple.style.left = `${x - cursorSize / 2}px`;
+  ripple.style.top = `${y - cursorSize / 2}px`;
+
+  ripple.classList.add("ripple", "bg-primary/30");
+
+  document.body.appendChild(ripple);
+
+  ripple.style.animation = "ripple-animation 0.6s linear";
+
+  ripple.addEventListener("animationend", () => {
+    ripple.remove();
   });
 });

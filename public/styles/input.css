@@ -107,3 +107,19 @@
     @apply cursor-[var(--cursor-pointer)];
   }
 }
+
+@keyframes ripple-animation {
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.6;
+}
+
