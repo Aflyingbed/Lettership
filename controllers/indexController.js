@@ -151,23 +151,55 @@ async function displayUserLetters(req, res, next) {
 	}
 }
 
+async function isAuthorized(currentUser, letterId) {
+    const letter = await db.getLetterById(letterId);
+    if (!letter) {
+        throw new Error('Letter not found.');
+    }
+   
+    return currentUser.admin || currentUser.id === letter.user_id;
+}
+
+
 async function removeLetter(req, res, next) {
-	try {
-		await db.deleteLetter(req.params.id);
-		res.redirect("/");
-	} catch (err) {
-		return next(new Error("There was some trouble removing your letter."));
-	}
+    const { id } = req.params;
+    const currentUser = req.user;
+
+    try {
+        const authorized = await isAuthorized(currentUser, id);
+        if (!authorized) {
+            return next(new Error('Unauthorized to delete this letter.'));
+        }
+
+        await db.deleteLetter(id);
+
+        res.redirect(`/user/${currentUser.id}`);
+    } catch (err) {
+        console.error(err);
+        return next(new Error('There was some trouble deleting your letter.'));
+    }
 }
 
 async function editLetter(req, res, next) {
-	try {
-		await db.updateLetter(req.params.id, req.body.title, req.body.message);
-		res.redirect(`/user/${req.user.id}`);
-	} catch (err) {
-		return next(new Error("There was some trouble updating your letter."));
-	}
+    const { id } = req.params;
+    const { title, message } = req.body;
+    const currentUser = req.user;
+
+    try {
+        const authorized = await isAuthorized(currentUser, id);
+        if (!authorized) {
+            return next(new Error('Unauthorized to edit this letter.'));
+        }
+
+        await db.updateLetter(id, title, message);
+
+        res.redirect(`/user/${currentUser.id}`);
+    } catch (err) {
+        console.error(err);
+        return next(new Error('There was some trouble updating your letter.'));
+    }
 }
+
 
 module.exports = {
 	displayLetters,
