@@ -10,7 +10,7 @@ const matcher = new RegExpMatcher({
 });
 
 const spotifyUrlPattern =
-  /https:\/\/open\.spotify\.com\/(track|playlist|artist)\/([A-Za-z0-9]{22})/;
+  /https:\/\/open\.spotify\.com\/(track|playlist|album|artist)\/([A-Za-z0-9]{22})/;
 
 const { check } = require("express-validator");
 
@@ -47,7 +47,7 @@ const validationRules = [
     .custom((spotifyUrl) => {
       if (spotifyUrl && !spotifyUrlPattern.test(spotifyUrl)) {
         throw new Error(
-          "Please provide a valid Spotify URL (track, playlist, or artist)"
+          "Please provide a valid Spotify URL (track, playlist, album, or artist)"
         );
       }
       return true;

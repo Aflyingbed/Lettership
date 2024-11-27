@@ -8,7 +8,7 @@ const fields = [
 ];
 const namePattern = /^[A-Za-zÀ-ÿ\s'-]+$/;
 const spotifyUrlPattern =
-  /https:\/\/open\.spotify\.com\/(track|playlist|artist)\/([A-Za-z0-9]{22})/;
+  /https:\/\/open\.spotify\.com\/(track|playlist|album|artist)\/([A-Za-z0-9]{22})/;
 
 function showError(element, errorElement, message) {
   element.classList.add("input-error", "border-error");
@@ -54,7 +54,7 @@ function validateFile(file) {
 
 function validateSpotifyUrl(value) {
   if (value && !spotifyUrlPattern.test(value)) {
-    return "Please provide a valid Spotify URL (track, playlist, or artist)";
+    return "Please provide a valid Spotify URL (track, playlist, album, or artist)";
   }
   return ""; 
 }

@@ -28,7 +28,7 @@ async function getSpotifyAccessToken() {
 
 async function validateSpotifyUrl(spotifyUrl) {
   const regex =
-    /https:\/\/open\.spotify\.com\/(track|playlist|artist)\/([A-Za-z0-9]{22})/;
+    /https:\/\/open\.spotify\.com\/(track|playlist|album|artist)\/([A-Za-z0-9]{22})/;
   const match = spotifyUrl.match(regex);
 
   if (match) {
