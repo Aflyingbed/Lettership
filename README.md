@@ -11,8 +11,8 @@ The project utilizes the following technologies and libraries:
 - **PassportJS** for authentication and user login.
 - **Cloudinary** for storing user profile pictures.
 - **Obscenity library** for detecting and censoring inappropriate content.
-- **Spotify Showcase**: Users can set their favorite Spotify track, album, artist, or playlist, which is showcased in an embed on their profile page. Clicking on a user's profile picture reveals this Spotify embed.
-- **Dynamic Themes & Fonts**: Lettership offers multiple theme options (e.g., dark, light, etc.), and users can choose from various fonts for a personalized experience.
+- **Spotify Showcase**: Users can set their favorite Spotify track, album, artist, or playlist, which is showcased in an embed on their profile picture. Clicking on a user's profile picture reveals this Spotify embed.
+- **Dynamic Themes & Fonts**: Lettership offers multiple theme options, and users can choose from various fonts for a personalized experience
 - **Sound Effects**: Each theme comes with its own custom sound effects to enhance the user experience and immersion.
 
 ## License & Copyright
