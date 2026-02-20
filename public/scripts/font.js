@@ -51,10 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (soundEffects[newFont]) {
         currentAudio = soundEffects[newFont].audio;
+        // Apply current volume
+        const savedVolume = localStorage.getItem("appVolume");
+        if (savedVolume !== null) currentAudio.volume = parseFloat(savedVolume);
+        
         currentAudio
           .play()
           .catch((err) => console.log("Could not play sound:", err));
       }
+    });
+  });
+
+  window.addEventListener('volumeChanged', (e) => {
+    const volume = e.detail.volume;
+    Object.values(soundEffects).forEach(sound => {
+      if (sound.audio) sound.audio.volume = volume;
     });
   });
 });

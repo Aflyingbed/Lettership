@@ -10,8 +10,25 @@ const sounds = {
 
 Object.values(sounds).forEach((sound) => {
   sound.load();
-  sound.volume = 0.5;
 });
+
+const getSavedVolume = () => {
+  const saved = localStorage.getItem("appVolume");
+  return saved !== null ? parseFloat(saved) : 0.5;
+};
+
+const setGlobalVolume = (val) => {
+  const volume = parseFloat(val);
+  Object.values(sounds).forEach((sound) => {
+    sound.volume = volume;
+  });
+  localStorage.setItem("appVolume", volume);
+  
+  // Dispatch a global event for font.js and theme.js to pick up
+  window.dispatchEvent(new CustomEvent('volumeChanged', { detail: { volume } }));
+};
+
+setGlobalVolume(getSavedVolume());
 
 const playSound = (sound) => {
   sound.currentTime = 0;
@@ -85,4 +102,85 @@ document.addEventListener("DOMContentLoaded", () => {
         playSound(sound);
       });
     });
+
+  // Volume control logic
+  const volumeRange = document.getElementById("volumeRange");
+  const mobileVolumeIcon = document.getElementById("mobileVolumeIcon");
+  const desktopVolumeRange = document.getElementById("desktopVolumeRange");
+  const desktopVolumeIcon = document.getElementById("desktopVolumeIcon");
+
+  const desktopMuteCheckbox = document.getElementById("desktopMuteCheckbox");
+  const mobileMuteCheckbox = document.getElementById("mobileMuteCheckbox");
+
+  const updateVolumeUI = (val) => {
+    const volume = parseFloat(val);
+    [volumeRange, desktopVolumeRange].forEach(el => {
+      if (el) el.value = volume;
+    });
+    
+    // Update mute checkboxes (swap state)
+    const isMuted = volume === 0;
+    [desktopMuteCheckbox, mobileMuteCheckbox].forEach(cb => {
+      if (cb) cb.checked = !isMuted; // swap-on is volume-on, so checked = !muted
+    });
+  };
+
+  const handleVolumeChange = (e) => {
+    const val = e.target.value;
+    setGlobalVolume(val);
+    updateVolumeUI(val);
+  };
+
+  const toggleMute = () => {
+    const currentVolume = getSavedVolume();
+    if (currentVolume > 0) {
+      localStorage.setItem("lastVolume", currentVolume);
+      setGlobalVolume(0);
+      updateVolumeUI(0);
+    } else {
+      const lastVolume = localStorage.getItem("lastVolume") || 0.5;
+      setGlobalVolume(lastVolume);
+      updateVolumeUI(lastVolume);
+    }
+  };
+
+  [volumeRange, desktopVolumeRange].forEach(el => {
+    if (el) {
+      el.addEventListener("input", handleVolumeChange);
+    }
+  });
+
+  if (desktopMuteCheckbox) {
+    desktopMuteCheckbox.addEventListener("click", (e) => {
+      toggleMute();
+    });
+  }
+
+  if (mobileMuteCheckbox) {
+    mobileMuteCheckbox.addEventListener("click", (e) => {
+      const isSliderClosed = mobileVolumeSlider.classList.contains("scale-0");
+      if (isSliderClosed) {
+        // Just opening the slider, don't mute
+        e.preventDefault();
+        mobileVolumeSlider.classList.remove("scale-0", "opacity-0");
+        mobileVolumeSlider.classList.add("scale-100", "opacity-100");
+      } else {
+        // Slider is already open, perform the mute toggle
+        toggleMute();
+      }
+    });
+  }
+
+  // Mobile slider visibility logic (Closing part)
+  if (mobileVolumeIcon && mobileVolumeSlider) {
+    document.addEventListener("click", (e) => {
+      if (!mobileVolumeSlider.contains(e.target) && !mobileVolumeIcon.contains(e.target)) {
+        mobileVolumeSlider.classList.add("scale-0", "opacity-0");
+        mobileVolumeSlider.classList.remove("scale-100", "opacity-100");
+      }
+    });
+  }
+
+  // Initialize UI
+  updateVolumeUI(getSavedVolume());
 });

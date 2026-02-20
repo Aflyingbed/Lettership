@@ -123,3 +123,8 @@
   opacity: 0.6;
 }
 
+@layer components {
+  .range-volume {
+    @apply range range-xs range-primary;
+  }
+}

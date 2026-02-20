@@ -45,10 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (themeSounds[selectedTheme]) {
         currentThemeAudio = themeSounds[selectedTheme].audio;
+        // Apply current volume
+        const savedVolume = localStorage.getItem("appVolume");
+        if (savedVolume !== null) currentThemeAudio.volume = parseFloat(savedVolume);
+
         currentThemeAudio
           .play()
           .catch((err) => console.log("Could not play sound:", err));
       }
+    });
+  });
+
+  window.addEventListener('volumeChanged', (e) => {
+    const volume = e.detail.volume;
+    Object.values(themeSounds).forEach(sound => {
+      if (sound.audio) sound.audio.volume = volume;
     });
   });
 });

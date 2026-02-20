@@ -29,7 +29,7 @@
     >
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-lg font-bold text-primary text-center">
-          <%= row.users.first_name %>'s vibe
+          <%= currentUser.membership || currentUser.id === row.user_id ? row.users.first_name : 'Anonymous' %>'s vibe
         </h3>
         <button
           onclick="toggleSpotifyEmbed(<%= row.id %>)"
